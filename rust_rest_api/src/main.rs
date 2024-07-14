@@ -27,7 +27,7 @@ async fn verify_proof(form_data: Form<VerifyProofFormData>) -> String {
     let pem = str::from_utf8(include_bytes!("../notary.pem")).unwrap();
     let proof = data.proof.as_str();
     let result = verify::verify(proof, pem).await.expect("result");
-    format!("Verified")
+    format!("{}", result)
 }
 
 #[get("/")]
