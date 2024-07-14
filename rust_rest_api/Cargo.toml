@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 rocket = "0.5.1"
+rocket_contrib = "0.4.11"
 
 tlsn-core = { git = "https://github.com/tlsnotary/tlsn.git", tag = "v0.1.0-alpha.5", package = "tlsn-core" }
 tlsn-verifier = { git = "https://github.com/tlsnotary/tlsn.git", tag = "v0.1.0-alpha.5", package = "tlsn-verifier", features = [

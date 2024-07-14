@@ -1,5 +1,10 @@
 #[macro_use] extern crate rocket;
 
+use rocket::data::{Limits, ToByteUnit};
+use rocket::figment::Figment;
+
+use serde::Deserialize;
+
 extern crate tlsn_verifier;
 use tlsn_verifier::*;
 
@@ -9,14 +14,20 @@ use std::{str};
 mod verify;
 mod request_opt; 
 
-#[get("/<name>/<age>")]
-fn hello(name: &str, age: u8) -> String {
-    format!("Hello, {} year old named {}!", age, name)
+use rocket::form::Form;
+
+#[derive(FromForm)]
+struct VerifyProofFormData {
+    proof: String,
 }
 
-#[post("/", data = "<proof>")]
-fn verify_proof(proof: String) -> String {
-    format!("Data: {}", proof)
+#[post("/", data = "<form_data>")]
+async fn verify_proof(form_data: Form<VerifyProofFormData>) -> String {
+    let data = form_data.into_inner();
+    let pem = str::from_utf8(include_bytes!("../notary.pem")).unwrap();
+    let proof = data.proof.as_str();
+    let result = verify::verify(proof, pem).await.expect("result");
+    format!("Verified")
 }
 
 #[get("/")]
@@ -34,7 +45,6 @@ async fn test() -> String {
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/hello", routes![hello]);
     rocket::build().mount("/test", routes![test]);
     rocket::build().mount("/verify", routes![verify_proof])
 }

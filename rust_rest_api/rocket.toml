@@ -1,5 +1,0 @@
-[default.limits]
-form = "2 MiB"
-json = "2 MiB"
-msgpack = "2 MiB"
-"file/jpg" = "5 MiB"
