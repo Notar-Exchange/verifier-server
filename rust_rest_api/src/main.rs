@@ -34,7 +34,7 @@ async fn verify_proof(form_data: Form<VerifyProofFormData>) -> String {
 async fn test() -> String {
     let pem = str::from_utf8(include_bytes!("../notary.pem")).unwrap();
     let proof = str::from_utf8(include_bytes!(
-        "../proof.json"
+        "../proof-good-example.json"
     ))
     .unwrap();
 
