@@ -14,6 +14,11 @@ fn hello(name: &str, age: u8) -> String {
     format!("Hello, {} year old named {}!", age, name)
 }
 
+#[post("/", data = "<proof>")]
+fn verify_proof(proof: String) -> String {
+    format!("Data: {}", proof)
+}
+
 #[get("/")]
 async fn test() -> String {
     let pem = str::from_utf8(include_bytes!("../notary.pem")).unwrap();
@@ -30,5 +35,6 @@ async fn test() -> String {
 #[launch]
 fn rocket() -> _ {
     rocket::build().mount("/hello", routes![hello]);
-    rocket::build().mount("/test", routes![test])
+    rocket::build().mount("/test", routes![test]);
+    rocket::build().mount("/verify", routes![verify_proof])
 }
